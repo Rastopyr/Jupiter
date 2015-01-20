@@ -35,7 +35,7 @@ class MongooseCrud
 		model = @options.pool.get @options.modelName
 
 		if not model
-			error.throw "Model not exist in pool", "MDLNMNEXSTPOOL"
+			error.throw "Model #{@options.modelName} not exist in pool", "MDLNMNEXSTPOOL"
 
 		@model = model
 
@@ -44,6 +44,8 @@ class MongooseCrud
 		model = new @model data
 
 		model.save callback
+	count: () ->
+		@model.count.apply @model, arguments
 	find: () ->
 		@model.find.apply @model, arguments
 	findOne: () ->
@@ -91,10 +93,6 @@ class MongooseCrud
 			model.remove callback
 	remove: () ->
 		@model.remove.apply @model, arguments
-
-
-
-
 
 exports.Mongoose = MongooseCrud
 
