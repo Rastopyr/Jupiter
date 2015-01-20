@@ -50,7 +50,10 @@ getSafeModule = (path) ->
 	try
 		return require path
 	catch err
-		return false
+		if err.code is 'MODULE_NOT_FOUND'
+			return false
+
+		throw err
 
 getEntityPathes = (type, name) ->
 	eName = path.normalize name
