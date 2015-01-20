@@ -8,7 +8,6 @@ fs = getLibrary 'core/fs'
 string = getUtility 'core/string'
 error = getUtility 'core/error'
 
-
 class Mapper
 	constructor: (options) ->
 		type = 'Base'

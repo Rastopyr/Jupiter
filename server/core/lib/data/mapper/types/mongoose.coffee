@@ -31,7 +31,6 @@ class MongooseMapper extends mongoose.Mongoose
 	connect: () ->
 		connString = @connectString()
 		super connString, @options
-
 	connectString: () ->
 		@options.pathname = @db || @options.pathname
 
