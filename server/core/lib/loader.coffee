@@ -115,6 +115,7 @@ class Loader
 			bundles[bundleName] = require path.join bundlePath, bundleName
 
 		@bundles = bundles
+
 	preloadModules: () ->
 		self = @
 		modulePath = @modulePath
@@ -137,15 +138,40 @@ class Loader
 		parseOptions.call @, args
 
 	start: () ->
-		moduleOptions = @moduleOptions
+		self = @
+
 		modules = @modules
 		bundle = @bundles[@bundleName]
 
-		_.each modules, (module, name, list) ->
-			options = _.extend bundle[name], moduleOptions[name]
+		options = _.extend bundle, @moduleOptions
 
-			if options.active == 1
-				module.start options
+		filteredOptions = _.filter options, (option, key, list) ->
+			list[key].name = key 
+
+			option.active = option.active || 0
+
+			return option.active
+
+		sortedOptions = _.sortBy filteredOptions, (option, key, list) ->
+			option.priority = option.priority || 0
+
+			return option.priority
+
+		_.each sortedOptions, (option, key) ->
+			module = modules[option.name]
+
+			return if not module
+
+			module.start option
+
+
+		# _.each modules, (module, name, list) ->
+		# 	option = options[name]
+
+		# 	return if not option
+
+		# 	if option.active == 1
+		# 		module.start option
 
 
 Loader.class = Loader
