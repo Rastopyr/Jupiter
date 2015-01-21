@@ -19,6 +19,7 @@ settedModel =
 	name: "User"
 	options:
 		collection: "test"
+	type: "Mongoose"
 
 MongooseMapper = new Mapper
 	db: 'test'
@@ -48,9 +49,13 @@ describe '#Server', ->
 				userRest = new Rest 'Mongoose', restOpts
 
 				userRest.post
-					name: 'Senin Roman'
-				, (err, user) ->
+					user:
+						name: 'Senin Roman'
+				, (err, result) ->
 					should(err).be.eql null
+					
+					user = result.user
+
 					user.name.should.be.eql 'Senin Roman'
 
 					userRest.deleteOne user._id, done
@@ -59,12 +64,20 @@ describe '#Server', ->
 				userRest = new Rest 'Mongoose', restOpts
 
 				userRest.post
-					name: 'Senin Roman'
-				, (err, user) ->
+					user:
+						name: 'Senin Roman'
+				, (err, result) ->
 					should(err).be.eql null
+
+					user = result.user
+
 					user.name.should.be.eql 'Senin Roman'
 
-					userRest.find (err, users) ->
+					userRest.find (err, results) ->
+						should(err).be.eql null
+
+						users = results.users
+
 						users.should.be.Array
 
 						u = _.findWhere users, name: user.name
@@ -77,12 +90,19 @@ describe '#Server', ->
 				userRest = new Rest 'Mongoose', restOpts
 
 				userRest.post
-					name: 'Senin Roman'
-				, (err, user) ->
+					user:
+						name: 'Senin Roman'
+				, (err, result) ->
 					should(err).be.eql null
+
+					user = result.user
 					user.name.should.be.eql 'Senin Roman'
 
-					userRest.getOne user._id, (err, u) ->
+					userRest.getOne user._id, (err, result) ->
+						should(err).be.eql null
+
+						u = result.user
+
 						u._id.should.eql user._id
 						
 						userRest.deleteOne user._id, done
@@ -91,12 +111,20 @@ describe '#Server', ->
 				userRest = new Rest 'Mongoose', restOpts
 
 				userRest.post
-					name: 'Senin Roman'
-				, (err, user) ->
+					user:
+						name: 'Senin Roman'
+				, (err, result) ->
 					should(err).be.eql null
+
+					user = result.user
+
 					user.name.should.be.eql 'Senin Roman'
 
-					userRest.patch user._id, name: 'Roman Senin', (err, u) ->
+					userRest.patch user._id, user: name: 'Roman Senin', (err, result) ->
+						should(err).be.eql null
+
+						u = result.user
+
 						u._id.should.eql user._id
 						u.name.should.eql 'Roman Senin'
 
@@ -106,12 +134,20 @@ describe '#Server', ->
 				userRest = new Rest 'Mongoose', restOpts
 
 				userRest.post
-					name: 'Senin Roman'
-				, (err, user) ->
+					user:
+						name: 'Senin Roman'
+				, (err, result) ->
 					should(err).be.eql null
+
+					user = result.user
+
 					user.name.should.be.eql 'Senin Roman'
 
-					userRest.put user._id, name: 'Roman Senin', (err, u) ->
+					userRest.put user._id, user: name: 'Roman Senin', (err, result) ->
+						should(err).be.eql null
+						
+						u = result.user
+
 						u._id.should.eql user._id
 						u.name.should.eql 'Roman Senin'
 
@@ -121,16 +157,24 @@ describe '#Server', ->
 				userRest = new Rest 'Mongoose', restOpts
 
 				userRest.post
-					name: 'Senin Roman'
-				, (err, user) ->
+					user:
+						name: 'Senin Roman'
+				, (err, result) ->
 					should(err).be.eql null
+
+					user = result.user
+
 					user.name.should.be.eql 'Senin Roman'
 
 					userRest.deleteOne user._id, (err) ->
 						should(err).eql null
 
-						userRest.getOne user._id, (err, user) ->
+						userRest.getOne user._id, (err, result) ->
 							should(err).eql null
-							should(user).eql null
+
+							should(result.user).eql null
 
 							done()
+
+after () ->
+	MongooseMapper.disconnect()
