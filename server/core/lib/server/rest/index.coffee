@@ -78,7 +78,7 @@ class REST
 		self = @
 		self.options = options || {}
 
-		(req, res) ->
+		(req, res, next) ->
 			response = new RestResponse res
 			reqUrl = url.parse req.url
 			reqMethod = req.method.toLowerCase()
@@ -87,15 +87,19 @@ class REST
 			query = {}
 			body = {}
 
-			params = req.query
+			params = _.clone req.query
 
 			if params.selector
-				query = params.selector
+				query = _.clone params.selector
+				delete params.selector
 
 			if req.body
 				body = req.body
 
 			if isOne.length
+				if isOne.length > 2
+					return next()
+
 				id = Array.prototype.slice.call(isOne, 1, 2).pop()
 
 			method = "#{reqMethod}#{if id then 'One' else ''}"
@@ -108,7 +112,7 @@ class REST
 
 			switch method
 				when 'get' then return self.find query, params, done
-				when 'getOne' then return self.get id, params, done
+				when 'getOne' then return self.getOne id, params, done
 
 			if not self.options.isModified
 				return done new Error 'Access denied'
@@ -119,9 +123,6 @@ class REST
 					when 'putOne' then self.put id, body, params, done
 					when 'patchOne' then self.patch id, body, params, done
 					when 'deleteOne' then self.deleteOne id, done
-
-
-
 
 exports = REST
 
