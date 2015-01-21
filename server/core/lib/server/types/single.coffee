@@ -1,4 +1,6 @@
 
+http = require 'http'
+
 bodyParser = require 'body-parser'
 methodOverride = require 'method-override'
 
@@ -16,7 +18,7 @@ error = getUtility 'error'
 initMiddlawares = (options) ->
 	options.bodyParser = options.bodyParser || {}
 
-	bodyOptions = Object.keys bodyParser
+	bodyOptions = Object.keys options.bodyParser
 
 	for op in bodyOptions
 		if options.bodyParser[op]
@@ -24,8 +26,6 @@ initMiddlawares = (options) ->
 
 	if options.override
 		@use methodOverride()
-		@use bodyParser.json options.bodyParser['json'] || {}
-		@use bodyParser.urlencoded options.bodyParser['urlencoded'] || extended: true
 
 class ParentServer.Single extends ParentServer
 	constructor: (options) ->
@@ -41,16 +41,10 @@ class ParentServer.Single extends ParentServer
 		@express.lazyrouter()
 		@router = @express._router
 
-		# @express._router = @router
-
 		initMiddlawares.call @express, options
 
 		return @
-	use: (path, handler) ->
-		if 'function' is typeof path
-			handler = path
-			path = '/'
-
+	use: () ->
 		@express.use.apply @express, arguments
 
 		return @
@@ -95,6 +89,10 @@ class ParentServer.Single extends ParentServer
 		@express.engine.apply @express, arguments
 		return @
 	listen: () ->
-		@express.listen.apply @express, arguments
+		argArray = Array.prototype.slice.call arguments
+		argArray = [@options.port].concat argArray
+
+		@http = http.createServer.call http, @express
+		@http.listen.apply @http, argArray
 
 module.exports = ParentServer.Single
