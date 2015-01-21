@@ -61,26 +61,4 @@ describe '#FS', ->
 
 			isContain = _.contains files, requiredFile
 
-			isContain.should.be.ok
-
-	it 'should be fetch file to uploads directory', (done) ->
-		imageUrl = 'https://pp.vk.me/c421920/v421920987/446e/ujt0g_4bnGc.jpg'
-
-		fs.fetch imageUrl, join(pathes.base, 'static/uploads'), (err, imageInfo) ->
-			if err
-				return done err
-
-			fs.lstat imageInfo.path, (err, fd) ->
-				if err
-					return done err
-
-				if not fd.isFile()
-					return done new Error 'Image is not exist'
-
-				fs.unlink imageInfo.path, done
-
-	# it 'should be fetch and resize image', (done) ->
-	# 	imageUrl = 'https://pp.vk.me/c421920/v421920987/446e/ujt0g_4bnGc.jpg'
-
-	# 	fs.fetch imageUrl, join(pathes.base, 'static/uploads'), ['300x300', '200x200'], (errm imageInfo) ->
-			
+			isContain.should.be.ok	
