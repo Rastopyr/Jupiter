@@ -3,4 +3,4 @@ node_js:
   - "0.11"
   - "0.10"
 script:
-  - mocha server/test --reporter min --require coffee-script --compilers coffee:coffee-script/register --recursive --bundle test --module_express --option_express_port 3015 --isTest true
+  - npm test
