@@ -1,10 +1,10 @@
 {
   "name": "Jupiter",
-  "version": "0.17.9-beta",
+  "version": "0.17.10-beta",
   "description": "Jupiter framework",
   "main": "index.js",
   "scripts": {
-    "test": "mocha server/test --watch --reporter min --require coffee-script --compilers coffee:coffee-script/register --recursive --bundle test --module_express --option_express_port 3015 --isTest true"
+    "test": "mocha server/test --reporter min --require coffee-script --compilers coffee:coffee-script/register --recursive --bundle test --module_express --option_express_port 3015 --isTest true"
   },
   "repository": {
     "type": "git",
