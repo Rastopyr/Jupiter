@@ -4,3 +4,7 @@ node_js:
   - "0.10"
 script:
   - npm test
+services:
+  - mongodb
+addons:
+  postgresql: "9.3"
