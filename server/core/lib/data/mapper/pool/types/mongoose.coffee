@@ -1,24 +1,44 @@
 
 util = require 'util'
 path = require 'path'
+join = path.join
 
 _ = require 'underscore'
 mongoose = require 'mongoose'
 
 fs = getLibrary 'core/fs'
 error = getUtility 'core/error'
+Walker = require 'walk'
 
 modelPath = path.join pathes.app, 'model'
 
-loadModels = () ->
+loadModels = (callback) ->
 	self = @
-	models = fs.loadDirJsSync modelPath
 
-	for model in models
-		self.set model
+	options =
+		listeners:
+			directories: (root, dirStatsArray, next) ->
+				_.each dirStatsArray, (stat, kstat, list) ->
+					pathToDir = join root, stat.name
+
+					models = fs.loadDirJsSync pathToDir
+
+					for model in models
+						if not model.type
+							continue
+
+						if model.type isnt 'Mongoose'
+							continue
+
+						self.set model
+				next()
+			errors: (root, nodeStatsArray, next) ->
+				console.log nodeStatsArray
+
+	Walker.walkSync modelPath, options
 
 load = () ->
-	loadModels.call @
+	loadModels.call @, 
 	@isLoaded = true
 
 	return @
@@ -52,11 +72,14 @@ class MongoosePool
 		return null
 
 	set: (model) ->
+		if not model.type or model.type is not "Mongoose"
+			error.throw "Setted model not for Mongoose", "STTDMDLNFORMNGOOS"
+
 		if not schema = model.schema
-			error.throw "In model #{name} not exist schema field", "SCHMNEXST"
+			error.throw "In model #{model.name} not exist schema field", "SCHMNEXST"
 
 		if not options = model.options
-			error.throw "In model #{name} not exist option field", "OPTSNEXST"
+			error.throw "In model #{model.name} not exist option field", "OPTSNEXST"
 
 		schema = new @ctx.Schema schema, options
 

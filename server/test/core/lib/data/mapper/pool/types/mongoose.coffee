@@ -12,6 +12,16 @@ settedModel =
 	name: "User"
 	options:
 		collection: "test"
+	type: "Mongoose"
+
+settedModelNotMongoose =
+	schema:
+		name:
+			type: String
+			required: true
+	name: "User2"
+	options:
+		collection: "test"
 
 options =
 	ctx: mongoose
@@ -44,3 +54,13 @@ describe '#Data', ->
 					gettedModel = new MongoosePool(options).get settedModel.name
 					gettedModel.should.eql model
 					gettedModel.should.eql new MongoosePool(options).ctx.models[settedModel.name]
+
+				it '#Pool.get should not set model', () ->
+					try
+						new MongoosePool(options).set settedModelNotMongoose
+					catch e
+						e.message.should.eql "Setted model not for Mongoose"
+						e.code.should.eql "STTDMDLNFORMNGOOS"
+
+		after () ->
+			mongoose.disconnect()
