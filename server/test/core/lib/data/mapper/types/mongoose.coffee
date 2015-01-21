@@ -23,6 +23,7 @@ describe '#Data', ->
 				mapper = new MongooseMaper
 
 				mapper.connectString().should.eql 'mongodb://localhost:27017/test'
+				mapper.disconnect()
 
 			it 'should return correct connection url with auth', ->
 				mapper = new MongooseMaper
@@ -36,6 +37,3 @@ describe '#Data', ->
 					db: 'tested'
 
 				mapper.connectString().should.eql 'mongodb://localhost:27017/tested'
-
-
-

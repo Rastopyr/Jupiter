@@ -20,6 +20,7 @@ settedModel =
 	name: "User"
 	options:
 		collection: "test"
+	type: "Mongoose"
 
 MongooseMapper = new Mapper
 	db: 'test'
@@ -215,3 +216,6 @@ describe '#Data', () ->
 						should(user).eql null
 
 						done()
+
+after () ->
+	MongooseMapper.disconnect()
