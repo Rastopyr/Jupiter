@@ -81,7 +81,7 @@ class Options
 	parseOrder: () ->
 		debug 'parse model order of %s', @model.name
 
-		@.order = self.defOptions.order || []
+		@.order = @.defOptions.order || []
 	toExtend: () ->
 		new ExtendOptions @
 

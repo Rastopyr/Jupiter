@@ -106,10 +106,22 @@ describe '#Data', ->
 					options.offset.should.be.Number
 					options.offset.should.be.eql 10
 
+				it 'should have `order` property', ->
+					order = ['name ASC']
+
+					options = new Options
+						order: order
+					, fixtureModel
+
+					options.should.have.property 'order'
+					options.order.should.be.Array
+					options.order.should.be.eql order
+
 				it '.toExtend sould be return simple object with correct parameters', ->
 					opts =
 						offset: 10,
 						limit: 1
+						order: ['name ASC']
 
 					options = new Options opts, fixtureModel
 
