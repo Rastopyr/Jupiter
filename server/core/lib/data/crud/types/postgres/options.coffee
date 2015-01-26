@@ -16,7 +16,7 @@ class ExtendOptions
 		@include = opts.include
 	parseSelector: (opts)->
 		self = @
-		selectorFields = ['limit', 'offset']
+		selectorFields = ['limit', 'offset', 'order']
 
 		_.each selectorFields, (key) ->
 			if not opts[key]
@@ -45,6 +45,8 @@ class Options
 
 		# Parse limits and offsets
 		@.parseSelectorOptions()
+
+		@.parseOrder()
 	parseSelectorOptions: () ->
 		self = @
 		selectorFields = ['limit', 'offset']
@@ -76,6 +78,10 @@ class Options
 					model: model.target
 
 			self.include.push toIncludeModel
+	parseOrder: () ->
+		debug 'parse model order of %s', @model.name
+
+		@.order = self.defOptions.order || []
 	toExtend: () ->
 		new ExtendOptions @
 
