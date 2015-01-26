@@ -143,7 +143,10 @@ class Loader
 		modules = @modules
 		bundle = @bundles[@bundleName]
 
-		options = _.extend bundle, @moduleOptions
+		_.each @moduleOptions, (module, name, list) ->
+			bundle[name] = _.extend bundle[name], module
+
+		options = bundle
 
 		filteredOptions = _.filter options, (option, key, list) ->
 			list[key].name = key 
