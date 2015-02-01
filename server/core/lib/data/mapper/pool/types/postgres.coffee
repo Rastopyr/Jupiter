@@ -97,7 +97,14 @@ class PostgresPool
 
 			self.associateModel model, assocs, sequelize
 	associateModel: (model, associations, sequelize) ->
+		self = @
+
 		_.each associations, (assoc, name, list) ->
+			if associations instanceof Array
+				return if 'string' is typeof assoc
+
+				name = assoc.accosType
+
 			if 'object' is typeof assoc
 				if not assoc.modelName
 					error.throw "Not exist model name for associations", "NTEXSTMDLNMFRASSOC"
