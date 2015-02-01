@@ -103,7 +103,7 @@ class PostgresPool
 			if associations instanceof Array
 				return if 'string' is typeof assoc
 
-				name = assoc.accosType
+				name = assoc.assocType
 
 			if 'object' is typeof assoc
 				if not assoc.modelName
