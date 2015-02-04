@@ -76,6 +76,7 @@ class Options
 			else
 				toIncludeModel =
 					model: model.target
+					as: model.as
 
 			self.include.push toIncludeModel
 	parseOrder: () ->
